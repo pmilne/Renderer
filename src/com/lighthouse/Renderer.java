@@ -3,16 +3,16 @@ package com.lighthouse;
 import com.lighthouse.events.AbstractKeyHandler;
 import com.lighthouse.events.CameraKeyHandler;
 
-import java.awt.Dimension;
-import java.awt.event.KeyEvent;
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
-import javax.swing.JFrame;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import static javax.media.opengl.GL2.*;
 
@@ -66,8 +66,13 @@ public class Renderer {
                                             gl2.glBegin(GL_TRIANGLES);
                                             for (int j = 0; j < vertices.size(); j++) {
                                                 Vector3 v = vertices.get(j);
-                                                Vector2 tc = j == 0 ? new Vector2(0, 0) : j == 1 ? new Vector2(1, 0) : new Vector2(k, 1);
-                                                gl2.glTexCoord2d(tc.x, tc.y); // has to be done before glVertex() call
+                                                // @formatter:off
+                                                switch(j) {
+                                                    case 0: gl2.glTexCoord2d(0, 0); break;
+                                                    case 1: gl2.glTexCoord2d(1, 0); break;
+                                                    case 2: gl2.glTexCoord2d(k, 1); break;
+                                                }
+                                                // @formatter:on
                                                 gl2.glVertex3d(v.x, v.y, v.z);
                                             }
                                             gl2.glEnd();
