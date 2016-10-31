@@ -39,16 +39,14 @@ public class Texture {
         this(gl, getTexture2(gl, file));
     }
 
-    public Graphics bind(Graphics graphics) {
+    public Graphics getGraphics(GL2 gl) {
         return new Graphics() {
             @Override
             public void draw(Drawable d) {
-                graphics.draw(gl -> {
-                    int oldTexture = Graphics.getIntValue(gl, GL_TEXTURE_BINDING_2D);
-                    gl.glBindTexture(GL_TEXTURE_2D, id);
-                    d.draw(gl);
-                    gl.glBindTexture(GL_TEXTURE_2D, oldTexture);
-                });
+                int oldTexture = Graphics.getIntValue(gl, GL_TEXTURE_BINDING_2D);
+                gl.glBindTexture(GL_TEXTURE_2D, id);
+                d.draw(gl);
+                gl.glBindTexture(GL_TEXTURE_2D, oldTexture);
             }
         };
     }

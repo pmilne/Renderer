@@ -84,10 +84,6 @@ public abstract class Graphics {
         };
     }
 
-    public Graphics with(Texture texture) {
-        return texture.bind(this);
-    }
-
     public Graphics withTransform(int matrixMode, CoordinateTransform transform) {
         return new Graphics() {
             @Override

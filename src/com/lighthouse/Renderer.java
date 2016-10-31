@@ -26,6 +26,10 @@ public class Renderer {
         return d0 / (d0 + d1);
     }
 
+    private static void submitVertex(GL2 gl, Vector3 v) {
+        gl.glVertex3d(v.x, v.y, v.z);
+    }
+
     private static GLEventListener createGLEventListener(Camera screen, Model model, File imagesDirectory) {
         List<Triangle<Vector3>> faces = Arrays.asList(model.faces);
         int size = faces.size();
@@ -58,16 +62,14 @@ public class Renderer {
                             gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                             for (int i = 0; i < size; i++) {
                                 Triangle<Vector3> face = faces.get(i);
-                                double k = getK(face);
-                                Graphics.get(gl)
-                                        .with(textures[i])
+                                textures[i].getGraphics(gl)
                                         .draw(gl2 -> {
                                             gl2.glBegin(GL_TRIANGLES);
                                             gl2.glTexCoord2d(0, 0);
                                             submitVertex(gl2, face.a);
                                             gl2.glTexCoord2d(1, 0);
                                             submitVertex(gl2, face.b);
-                                            gl2.glTexCoord2d(k, 1);
+                                            gl2.glTexCoord2d(getK(face), 1);
                                             submitVertex(gl2, face.c);
                                             gl2.glEnd();
                                         });
@@ -79,10 +81,6 @@ public class Renderer {
             public void dispose(GLAutoDrawable drawable) {
             }
         };
-    }
-
-    private static void submitVertex(GL2 gl2, Vector3 v) {
-        gl2.glVertex3d(v.x, v.y, v.z);
     }
 
     private static Camera getScreenCamera() {
