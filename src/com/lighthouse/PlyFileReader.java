@@ -1,26 +1,15 @@
 package com.lighthouse;
 
 import java.io.*;
+import java.util.Arrays;
 
 public class PlyFileReader {
     private static double[] parseDoubles(String s) {
-        String[] doubleStrings = s.split("\\s+");
-        int N = doubleStrings.length;
-        double[] result = new double[N];
-        for (int i = 0; i < N; i++) {
-            result[i] = Double.parseDouble(doubleStrings[i]);
-        }
-        return result;
+        return Arrays.stream(s.split("\\s+")).mapToDouble(Double::parseDouble).toArray();
     }
 
     private static int[] parseInts(String s) {
-        String[] doubleStrings = s.split("\\s+");
-        int N = doubleStrings.length;
-        int[] result = new int[N];
-        for (int i = 0; i < N; i++) {
-            result[i] = Integer.parseInt(doubleStrings[i]);
-        }
-        return result;
+        return Arrays.stream(s.split("\\s+")).mapToInt(Integer::parseInt).toArray();
     }
 
     public Model readFile(File file) throws IOException {
