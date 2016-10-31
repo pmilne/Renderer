@@ -22,8 +22,20 @@ public class Vector3 {
 
     // Static methods
 
-    public static Vector3 sum(Vector3 a, Vector3 b) {
-        return new Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
+    public static Vector3 sum(Vector3... vertices) {
+        double x = 0;
+        double y = 0;
+        double z = 0;
+        for (Vector3 v : vertices) {
+            x += v.x;
+            y += v.y;
+            z += v.z;
+        }
+        return new Vector3(x, y, z);
+    }
+
+    public static Vector3 average(Vector3... vertices) {
+        return scale(1.0 / vertices.length, sum(vertices));
     }
 
     public static Vector3 diff(Vector3 a, Vector3 b) {

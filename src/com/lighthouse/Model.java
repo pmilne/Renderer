@@ -11,16 +11,18 @@ import java.util.List;
  * @author pmilne
  */
 public class Model {
+    private Vector3 centre;
     public Vector3[] points;
     public Triangle<Vector3>[] faces;
 
     public Model(Vector3[] points, Triangle<Vector3>[] faces) {
+        this.centre = Vector3.average(points);
         this.points = points;
         this.faces = faces;
     }
 
     public Vector3 getRotationCentre() {
-        return new Vector3(0, 0, 0);
+        return centre;
     }
 
     public List<Triangle<Vector3>> getTriangles() {

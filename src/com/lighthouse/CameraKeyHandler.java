@@ -2,6 +2,10 @@ package com.lighthouse;
 
 import java.util.function.Supplier;
 
+import static com.lighthouse.DoubleArrays.mult;
+import static com.lighthouse.DoubleArrays.transpose;
+import static com.lighthouse.Vector3.sum;
+
 public class CameraKeyHandler extends GenericKeyHandler {
 
     private final Model model;
@@ -26,12 +30,12 @@ public class CameraKeyHandler extends GenericKeyHandler {
         return () -> {
             Camera camera = getSelectedCamera();
             Vector3 step = Vector3.scale(moveIncrement, direction);
-            camera.setCentre(Vector3.sum(camera.getCentre(), camera.rotate(step)));
+            camera.setCentre(sum(camera.getCentre(), camera.rotate(step)));
         };
     }
 
     public static void rotate(Camera camera, Rotation rotation) {
-        camera.setRotation(rotation.inverse().compose(camera.getRotation()));
+        camera.setRotation(rotation.compose(camera.getRotation().inverse()).inverse());
     }
 
     private Vector3 getTuringPoint() {
@@ -52,7 +56,7 @@ public class CameraKeyHandler extends GenericKeyHandler {
     public static void trackZoom(Camera camera, Vector3 modelCentre, double k) {
         Vector3 cameraToModel = Vector3.diff(camera.getCentre(), modelCentre);
         camera.setFocalLength(camera.getFocalLength() / k);
-        camera.setCentre(Vector3.sum(modelCentre, Vector3.scale(1 / k, cameraToModel)));
+        camera.setCentre(sum(modelCentre, Vector3.scale(1 / k, cameraToModel)));
     }
 
     @Override
@@ -65,13 +69,38 @@ public class CameraKeyHandler extends GenericKeyHandler {
         };
     }
 
+    private Vector3 rotateAxis(Vector3 axis) {
+        return getSelectedCamera().rotate(axis);
+    }
+
+    private Rotation getEulerRotation(Vector3 axis) {
+        return Rotation.create(turnIncrement, axis);
+    }
+
     @Override
     protected Action rotate(Vector3 axis) {
-        return null;
+        return () -> {
+            Camera camera = getSelectedCamera();
+            Rotation eulerRotation = getEulerRotation(rotateAxis(axis));
+            rotate(camera, eulerRotation);
+        };
+    }
+
+    private static void crabPan(Camera camera, Vector3 pivot, Rotation rotation) {
+        double[][] R = rotation.toArray3x3();
+        double[] cameraCentreRelativeToModelCentre = Vector3.diff(camera.getCentre(), pivot).toArray();
+        Vector3 rotated = new Vector3(mult(transpose(R), cameraCentreRelativeToModelCentre));
+        camera.setCentre(sum(rotated, pivot));
+        camera.setRotation(new Rotation(mult(camera.getRotation().inverse().toArray3x3(), R)).inverse());
     }
 
     @Override
     protected Action crabPan(Vector3 crabAxis, Vector3 panAxis) {
-        return super.crabPan(crabAxis, panAxis);
+        return () -> {
+            Camera camera = getSelectedCamera();
+            Vector3 modelCentre = getTuringPoint();
+            Rotation rotation = getEulerRotation(rotateAxis(panAxis));
+            crabPan(camera, modelCentre, rotation);
+        };
     }
 }
