@@ -14,11 +14,6 @@
  </properties>
 
  <dependencies>
-  <dependency>
-   <groupId>org.apache.logging.log4j</groupId>
-   <artifactId>log4j-core</artifactId>
-   <version>2.6.2</version>
-  </dependency>
    <dependency>
    <groupId>org.jogamp.gluegen</groupId>
    <artifactId>gluegen-rt-main</artifactId>
@@ -29,16 +24,5 @@
    <artifactId>jogl-all-main</artifactId>
    <version>2.0.2</version>
   </dependency>
-  <dependency>
-   <groupId>edu.stanford.nlp</groupId>
-   <artifactId>stanford-corenlp</artifactId>
-   <version>3.3.1</version>
-  </dependency>
-   <dependency>
-     <groupId>junit</groupId>
-     <artifactId>junit</artifactId>
-     <version>4.12</version>
-     <scope>test</scope>
-   </dependency>
  </dependencies>
 </project>
