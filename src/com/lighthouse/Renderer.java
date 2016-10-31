@@ -16,11 +16,10 @@ import javax.swing.JFrame;
 import static javax.media.opengl.GL2.*;
 
 public class Renderer {
-
-    private static double getK(Vector3[] vv) {
-        Vector3 A = Vector3.diff(vv[1], vv[0]);
-        Vector3 B = Vector3.diff(vv[2], vv[1]);
-        Vector3 C = Vector3.diff(vv[0], vv[2]);
+    private static double getK(Triangle<Vector3> face) {
+        Vector3 A = Vector3.diff(face.b, face.a);
+        Vector3 B = Vector3.diff(face.c, face.b);
+        Vector3 C = Vector3.diff(face.a, face.c);
         double d0 = Vector3.dot(C, A);
         double d1 = Vector3.dot(B, A);
         return d0 / (d0 + d1);
@@ -56,16 +55,16 @@ public class Renderer {
                         .draw(gl -> {
                             gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                             for (int i = 0; i < size; i++) {
-                                Triangle<Vector3> triangle = faces.get(i);
-                                Vector3[] vv = triangle.vertices;
-                                double k = getK(vv);
+                                Triangle<Vector3> face = faces.get(i);
+                                double k = getK(face);
+                                List<Vector3> vertices = face.getVertices();
                                 Graphics.get(gl)
                                         .with(textures[i])
                                         .draw(gl2 -> {
                                             gl2.glBegin(GL_TRIANGLES);
-                                            for (int i2 = 0; i2 < vv.length; i2++) {
-                                                Vector3 v = vv[i2];
-                                                Vector2 tc = i2 == 0 ? new Vector2(0, 0) : i2 == 1 ? new Vector2(1, 0) : new Vector2(k, 1);
+                                            for (int j = 0; j < vertices.size(); j++) {
+                                                Vector3 v = vertices.get(j);
+                                                Vector2 tc = j == 0 ? new Vector2(0, 0) : j == 1 ? new Vector2(1, 0) : new Vector2(k, 1);
                                                 gl2.glTexCoord2d(tc.x, tc.y); // has to be done before glVertex() call
                                                 gl2.glVertex3d(v.x, v.y, v.z);
                                             }
