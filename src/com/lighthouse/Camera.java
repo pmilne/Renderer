@@ -7,6 +7,12 @@ import static javax.media.opengl.GL2.*;
 public final class Camera {
     private static final double CLEAR_DEPTH = 0;
     private static final int DEPTH_TEST = GL_GEQUAL;
+    private static final double[] PROJECTION_TRANSFORM = {
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 0, -1,
+            0, 0, 1. / 65536, 0
+    };
 
     private Dimension size;
     private Vector3 centre = new Vector3(0, 0, 0);
@@ -45,27 +51,15 @@ public final class Camera {
         this.rotation = rotation;
     }
 
-    private Vector3 size() {
-        return new Vector3(size.width / 2.0, size.height / 2.0, focalLength);
-    }
-
-    private double[] getProjectionAndAspectRatioTransform0() {
-        return new double[]{
-                1, 0, 0, 0,
-                0, 1, 0, 0,
-                0, 0, 0, -1,
-                0, 0, 1. / 65536, 0
-        };
-    }
-
     public CoordinateTransform getProjectionTransform() {
         return gl -> {
-            Vector3 size = size();
-            gl.glMultMatrixd(getProjectionAndAspectRatioTransform0(), 0);
-            if (size.z == 0) {
+            gl.glMultMatrixd(PROJECTION_TRANSFORM, 0);
+            if (focalLength == 0) {
                 System.err.println("The screen camera has a focal length of zero.");
+            } else {
+                Vector3 scale = new Vector3(size.width / 2.0, size.height / 2.0, focalLength);
+                gl.glScaled(1 / scale.x, 1 / scale.y, 1 / scale.z);
             }
-            gl.glScaled(1 / size.x, 1 / size.y, 1 / size.z);
         };
     }
 
@@ -77,7 +71,7 @@ public final class Camera {
         };
     }
 
-    public Graphics map(Graphics g) {
+    public Graphics bind(Graphics g) {
         return g.withClearDepth(CLEAR_DEPTH)
                 .withDepthFunction(DEPTH_TEST)
                 .withTransform(GL_MODELVIEW, getModelViewTransform())

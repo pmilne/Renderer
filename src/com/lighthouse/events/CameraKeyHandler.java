@@ -1,4 +1,6 @@
-package com.lighthouse;
+package com.lighthouse.events;
+
+import com.lighthouse.*;
 
 import java.util.function.Supplier;
 

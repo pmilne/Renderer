@@ -110,18 +110,4 @@ public abstract class Graphics {
             }
         };
     }
-
-    public Graphics translate(double x, double y, double z) {
-        return new Graphics() {
-            @Override
-            public void draw(Drawable d) {
-                Graphics.this.draw(gl -> {
-                    gl.glPushMatrix();
-                    gl.glTranslated(x, y, z);
-                    d.draw(gl);
-                    gl.glPopMatrix();
-                });
-            }
-        };
-    }
 }

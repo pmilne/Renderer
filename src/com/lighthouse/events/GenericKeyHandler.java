@@ -1,4 +1,7 @@
-package com.lighthouse;
+package com.lighthouse.events;
+
+import com.lighthouse.Vector3;
+import com.lighthouse.events.AbstractKeyHandler;
 
 import java.util.Map;
 

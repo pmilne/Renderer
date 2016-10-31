@@ -1,4 +1,4 @@
-package com.lighthouse;
+package com.lighthouse.events;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

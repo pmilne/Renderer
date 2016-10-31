@@ -1,5 +1,8 @@
 package com.lighthouse;
 
+import com.lighthouse.events.AbstractKeyHandler;
+import com.lighthouse.events.CameraKeyHandler;
+
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -46,7 +49,7 @@ public class Renderer {
             @Override
             public void display(GLAutoDrawable drawable) {
                 Graphics g = Graphics.get(drawable.getGL().getGL2());
-                screen.map(g)
+                screen.bind(g)
                         .with(GL_DEPTH_TEST, true)
                         .with(GL_CULL_FACE, true)
                         .with(GL_TEXTURE_2D, true)
