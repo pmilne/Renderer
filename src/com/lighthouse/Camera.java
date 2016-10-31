@@ -16,12 +16,8 @@ public final class Camera {
 
     private Dimension size;
     private Vector3 centre = new Vector3(0, 0, 0);
-    private Rotation rotation;
+    private Rotation rotation = Rotation.IDENTITY;
     private double focalLength = 1000;
-
-    public Camera() {
-        setRotation(Rotation.IDENTITY); // there are no listeners yet so calling setter is ok
-    }
 
     public Vector3 getCentre() {
         return centre;
@@ -66,7 +62,7 @@ public final class Camera {
     public CoordinateTransform getModelViewTransform() {
         return gl -> {
             // we are using rowMajorOrder internally. GL uses columnMajorOrder which gives us the inverse rotation.
-            gl.glMultMatrixd(getRotation().toArray16(), 0);
+            gl.glMultMatrixd(rotation.toArray16(), 0);
             gl.glTranslated(-centre.x, -centre.y, -centre.z); // apply the inverse translation
         };
     }
@@ -79,6 +75,6 @@ public final class Camera {
     }
 
     public Vector3 rotate(Vector3 v) {
-        return getRotation().rotate(new Vector3(v.toArray()));
+        return rotation.rotate(new Vector3(v.toArray()));
     }
 }
