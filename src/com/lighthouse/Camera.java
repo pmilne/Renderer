@@ -57,9 +57,11 @@ public final class Camera {
 
     private CoordinateTransform getModelViewTransform() {
         return gl -> {
-            // we are using rowMajorOrder internally. GL uses columnMajorOrder which gives us the inverse rotation.
+            // apply the inverse rotation
+            // Because we're using rowMajorOrder internally and GL uses columnMajorOrder there is no need to transpose.
             gl.glMultMatrixd(rotation.toArray16(), 0);
-            gl.glTranslated(-centre.x, -centre.y, -centre.z); // apply the inverse translation
+            // apply the inverse translation
+            gl.glTranslated(-centre.x, -centre.y, -centre.z);
         };
     }
 
