@@ -51,7 +51,19 @@ public final class Camera {
         this.focalLength = focalLength;
     }
 
-    public CoordinateTransform getProjectionTransform() {
+    public Vector3 rotate(Vector3 v) {
+        return rotation.rotate(new Vector3(v.toArray()));
+    }
+
+    private CoordinateTransform getModelViewTransform() {
+        return gl -> {
+            // we are using rowMajorOrder internally. GL uses columnMajorOrder which gives us the inverse rotation.
+            gl.glMultMatrixd(rotation.toArray16(), 0);
+            gl.glTranslated(-centre.x, -centre.y, -centre.z); // apply the inverse translation
+        };
+    }
+
+    private CoordinateTransform getProjectionTransform() {
         return gl -> {
             gl.glMultMatrixd(PROJECTION_TRANSFORM, 0); // the 'last' (division) step of the projection comes first
             if (focalLength == 0) {
@@ -63,22 +75,10 @@ public final class Camera {
         };
     }
 
-    public CoordinateTransform getModelViewTransform() {
-        return gl -> {
-            // we are using rowMajorOrder internally. GL uses columnMajorOrder which gives us the inverse rotation.
-            gl.glMultMatrixd(rotation.toArray16(), 0);
-            gl.glTranslated(-centre.x, -centre.y, -centre.z); // apply the inverse translation
-        };
-    }
-
     public Graphics bind(Graphics g) {
         return g.withClearDepth(CLEAR_DEPTH)
                 .withDepthFunction(DEPTH_TEST)
                 .withTransform(GL_MODELVIEW, getModelViewTransform())
                 .withTransform(GL_PROJECTION, getProjectionTransform());
-    }
-
-    public Vector3 rotate(Vector3 v) {
-        return rotation.rotate(new Vector3(v.toArray()));
     }
 }
