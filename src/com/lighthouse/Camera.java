@@ -53,7 +53,7 @@ public final class Camera {
 
     public CoordinateTransform getProjectionTransform() {
         return gl -> {
-            gl.glMultMatrixd(PROJECTION_TRANSFORM, 0);
+            gl.glMultMatrixd(PROJECTION_TRANSFORM, 0); // the 'last' (division) step of the projection comes first
             if (focalLength == 0) {
                 System.err.println("The screen camera has a focal length of zero.");
             } else {
