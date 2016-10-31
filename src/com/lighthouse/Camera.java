@@ -14,9 +14,9 @@ public final class Camera {
             0, 0, 1. / 65536, 0
     };
 
-    private Dimension size;
     private Vector3 centre = new Vector3(0, 0, 0);
     private Rotation rotation = Rotation.IDENTITY;
+    private Dimension size = new Dimension(1000, 1000);
     private double focalLength = 1000;
 
     public Vector3 getCentre() {
@@ -27,24 +27,28 @@ public final class Camera {
         this.centre = centre;
     }
 
-    public double getFocalLength() {
-        return focalLength;
-    }
-
-    public void setFocalLength(double focalLength) {
-        this.focalLength = focalLength;
-    }
-
-    public void setSize(Dimension size) {
-        this.size = size;
-    }
-
     public Rotation getRotation() {
         return rotation;
     }
 
     public void setRotation(Rotation rotation) {
         this.rotation = rotation;
+    }
+
+    public Dimension getSize() {
+        return size;
+    }
+
+    public void setSize(Dimension size) {
+        this.size = size;
+    }
+
+    public double getFocalLength() {
+        return focalLength;
+    }
+
+    public void setFocalLength(double focalLength) {
+        this.focalLength = focalLength;
     }
 
     public CoordinateTransform getProjectionTransform() {
