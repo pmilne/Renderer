@@ -9,13 +9,14 @@ import static com.lighthouse.DoubleArrays.transpose;
 import static com.lighthouse.Vector3.sum;
 
 public class CameraKeyHandler extends GenericKeyHandler {
-
     private final Model model;
     private final Supplier<Camera> cameraHost;
+    private Vector3 turningPoint;
 
     public CameraKeyHandler(Supplier<Camera> cameraHost, Model model) {
         this.cameraHost = cameraHost;
         this.model = model;
+        this.turningPoint = Vector3.average(model.points);
         installBindings(bindings);
     }
 
@@ -43,7 +44,7 @@ public class CameraKeyHandler extends GenericKeyHandler {
     private Vector3 getTuringPoint() {
 //        Vertex modelIntersection = getModelCentre();
 //        return modelIntersection != null ? modelIntersection.toVector3() : model.getCentre();
-        return model.getRotationCentre();
+        return turningPoint;
     }
 
     @Override

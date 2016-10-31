@@ -6,6 +6,7 @@ import com.lighthouse.events.CameraKeyHandler;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
@@ -25,7 +26,8 @@ public class Renderer {
         return d0 / (d0 + d1);
     }
 
-    private static GLEventListener createGLEventListener(Camera screen, List<Triangle<Vector3>> faces, File imagesDirectory) {
+    private static GLEventListener createGLEventListener(Camera screen, Model model, File imagesDirectory) {
+        List<Triangle<Vector3>> faces = Arrays.asList(model.faces);
         int size = faces.size();
 
         return new GLEventListener() {
@@ -94,12 +96,12 @@ public class Renderer {
         Camera camera = getScreenCamera();
 
         // Add listeners
-        canvas.addGLEventListener(createGLEventListener(camera, model.getTriangles(), new File(directory, "textures")));
-        CameraKeyHandler l1 = new CameraKeyHandler(() -> camera, model);
+        canvas.addGLEventListener(createGLEventListener(camera, model, new File(directory, "textures")));
+        CameraKeyHandler cameraKeyHandler = new CameraKeyHandler(() -> camera, model);
         canvas.addKeyListener(new AbstractKeyHandler() {
             @Override
             public void keyPressed(KeyEvent e) {
-                l1.keyPressed(e);
+                cameraKeyHandler.keyPressed(e);
                 canvas.repaint();
             }
         });
@@ -115,7 +117,7 @@ public class Renderer {
     public static void main(String... args) throws Exception {
         File directory = new File("models/Globe");
         if (directory.exists()) {
-            Model model = Model.getModel(new File(directory, "model.ply"));
+            Model model = new PlyFileReader().readFile(new File(directory, "model.ply"));
             createRendererUI(directory, model, new Dimension(1920 / 4, 1080 / 4));
         }
     }
