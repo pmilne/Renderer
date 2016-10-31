@@ -59,22 +59,16 @@ public class Renderer {
                             for (int i = 0; i < size; i++) {
                                 Triangle<Vector3> face = faces.get(i);
                                 double k = getK(face);
-                                List<Vector3> vertices = face.getVertices();
                                 Graphics.get(gl)
                                         .with(textures[i])
                                         .draw(gl2 -> {
                                             gl2.glBegin(GL_TRIANGLES);
-                                            for (int j = 0; j < vertices.size(); j++) {
-                                                Vector3 v = vertices.get(j);
-                                                // @formatter:off
-                                                switch(j) {
-                                                    case 0: gl2.glTexCoord2d(0, 0); break;
-                                                    case 1: gl2.glTexCoord2d(1, 0); break;
-                                                    case 2: gl2.glTexCoord2d(k, 1); break;
-                                                }
-                                                // @formatter:on
-                                                gl2.glVertex3d(v.x, v.y, v.z);
-                                            }
+                                            gl2.glTexCoord2d(0, 0);
+                                            submitVertex(gl2, face.a);
+                                            gl2.glTexCoord2d(1, 0);
+                                            submitVertex(gl2, face.b);
+                                            gl2.glTexCoord2d(k, 1);
+                                            submitVertex(gl2, face.c);
                                             gl2.glEnd();
                                         });
                             }
@@ -85,6 +79,10 @@ public class Renderer {
             public void dispose(GLAutoDrawable drawable) {
             }
         };
+    }
+
+    private static void submitVertex(GL2 gl2, Vector3 v) {
+        gl2.glVertex3d(v.x, v.y, v.z);
     }
 
     private static Camera getScreenCamera() {
