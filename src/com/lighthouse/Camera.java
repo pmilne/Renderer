@@ -1,0 +1,90 @@
+package com.lighthouse;
+
+import java.awt.Dimension;
+
+import static javax.media.opengl.GL2.*;
+
+public final class Camera {
+    private static final double CLEAR_DEPTH = 0;
+    private static final int DEPTH_TEST = GL_GEQUAL;
+
+    private Dimension size;
+    private Vector3 centre = new Vector3(0, 0, 0);
+    private Rotation rotation;
+    private double focalLength = 1000;
+
+    public Camera() {
+        setRotation(Rotation.IDENTITY); // there are no listeners yet so calling setter is ok
+    }
+
+    public Vector3 getCentre() {
+        return centre;
+    }
+
+    public void setCentre(Vector3 centre) {
+        this.centre = centre;
+    }
+
+    public double getFocalLength() {
+        return focalLength;
+    }
+
+    public void setFocalLength(double focalLength) {
+        this.focalLength = focalLength;
+    }
+
+    public void setSize(Dimension size) {
+        this.size = size;
+    }
+
+    public Rotation getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(Rotation rotation) {
+        this.rotation = rotation;
+    }
+
+    private Vector3 size() {
+        return new Vector3(size.width / 2.0, size.height / 2.0, focalLength);
+    }
+
+    private double[] getProjectionAndAspectRatioTransform0() {
+        return new double[]{
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 0, -1,
+                0, 0, 1. / 65536, 0
+        };
+    }
+
+    public CoordinateTransform getProjectionTransform() {
+        return gl -> {
+            Vector3 size = size();
+            gl.glMultMatrixd(getProjectionAndAspectRatioTransform0(), 0);
+            if (size.z == 0) {
+                System.err.println("The screen camera has a focal length of zero.");
+            }
+            gl.glScaled(1 / size.x, 1 / size.y, 1 / size.z);
+        };
+    }
+
+    public CoordinateTransform getModelViewTransform() {
+        return gl -> {
+            // we are using rowMajorOrder internally. GL uses columnMajorOrder which gives us the inverse rotation.
+            gl.glMultMatrixd(getRotation().toArray16(), 0);
+            gl.glTranslated(-centre.x, -centre.y, -centre.z); // apply the inverse translation
+        };
+    }
+
+    public Graphics map(Graphics g) {
+        return g.withClearDepth(CLEAR_DEPTH)
+                .withDepthFunction(DEPTH_TEST)
+                .withTransform(GL_MODELVIEW, getModelViewTransform())
+                .withTransform(GL_PROJECTION, getProjectionTransform());
+    }
+
+    public Vector3 rotate(Vector3 v) {
+        return getRotation().rotate(new Vector3(v.toArray()));
+    }
+}
