@@ -3,11 +3,6 @@ package com.lighthouse;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Copyright LighthouseLabs Inc. All rights reserved.
- *
- * @author pmilne
- */
 public class Triangle<T> {
     public final T a;
     public final T b;

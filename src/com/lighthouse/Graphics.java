@@ -5,11 +5,6 @@ import javax.media.opengl.GL2;
 import static javax.media.opengl.GL.*;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MATRIX_MODE;
 
-/**
- * Copyright LighthouseLabs Inc. All rights reserved.
- *
- * @author pmilne
- */
 public abstract class Graphics {
 
     // Static utilities

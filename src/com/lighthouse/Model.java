@@ -5,11 +5,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Copyright LighthouseLabs Inc. All rights reserved.
- *
- * @author pmilne
- */
 public class Model {
     private Vector3 centre;
     public Vector3[] points;

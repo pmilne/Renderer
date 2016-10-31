@@ -4,11 +4,6 @@ import java.util.Arrays;
 
 import static com.lighthouse.DoubleArrays.mult;
 
-/**
- * Copyright LighthouseLabs Inc. All rights reserved.
- *
- * @author pmilne
- */
 public class Rotation {
     public static final Rotation IDENTITY = new Rotation(DoubleArrays.identity(3));
     private static final int[][] SIGNS = new int[][]{{0, -1, 1}, {1, 0, -1}, {-1, 1, 0}}; // (1 + (i - j) mod 3) - 1; // use Math.floorMod

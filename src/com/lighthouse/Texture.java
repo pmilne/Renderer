@@ -1,12 +1,11 @@
 package com.lighthouse;
 
-import java.awt.Dimension;
+import com.jogamp.opengl.util.texture.TextureIO;
+
+import javax.media.opengl.GL2;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import javax.media.opengl.GL2;
-
-import com.jogamp.opengl.util.texture.TextureIO;
 
 import static javax.media.opengl.GL2.*;
 

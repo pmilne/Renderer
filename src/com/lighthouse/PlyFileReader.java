@@ -2,11 +2,6 @@ package com.lighthouse;
 
 import java.io.*;
 
-/**
- * Copyright LighthouseLabs Inc. All rights reserved.
- *
- * @author pmilne
- */
 public class PlyFileReader {
     private static double[] parseDoubles(String s) {
         String[] doubleStrings = s.split("\\s+");
