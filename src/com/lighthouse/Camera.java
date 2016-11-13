@@ -51,10 +51,6 @@ public final class Camera {
         this.focalLength = focalLength;
     }
 
-    public Vector3 rotate(Vector3 v) {
-        return rotation.rotate(v);
-    }
-
     private CoordinateTransform getModelViewTransform() {
         return gl -> {
             // apply the inverse rotation

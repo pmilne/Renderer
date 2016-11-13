@@ -33,7 +33,7 @@ public class CameraKeyHandler extends GenericKeyHandler {
         return () -> {
             Camera camera = getSelectedCamera();
             Vector3 step = Vector3.scale(moveIncrement, direction);
-            camera.setCentre(sum(camera.getCentre(), camera.rotate(step)));
+            camera.setCentre(sum(camera.getCentre(), camera.getRotation().rotate(step)));
         };
     }
 
@@ -73,7 +73,7 @@ public class CameraKeyHandler extends GenericKeyHandler {
     }
 
     private Vector3 rotateAxis(Vector3 axis) {
-        return getSelectedCamera().rotate(axis);
+        return getSelectedCamera().getRotation().rotate(axis);
     }
 
     private Rotation getEulerRotation(Vector3 axis) {
