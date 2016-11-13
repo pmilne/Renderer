@@ -52,7 +52,7 @@ public final class Camera {
     }
 
     public Vector3 rotate(Vector3 v) {
-        return rotation.rotate(new Vector3(v.toArray()));
+        return rotation.rotate(v);
     }
 
     private CoordinateTransform getModelViewTransform() {
